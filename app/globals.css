@@ -1,26 +1,124 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/*
+  Aesthetic direction: "Document craft / editorial"
+  和紙(washi)風の温かいオフホワイト地に、墨色のタイポグラフィ、
+  朱色(vermilion)を一点アクセントに使うエディトリアルな職務経歴書ツール。
+*/
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-paper: #f3ede0;
+  --color-surface: #fbf7ee;
+  --color-surface-raised: #ffffff;
+  --color-ink: #211e1a;
+  --color-ink-soft: #5b554c;
+  --color-ink-faint: #948d80;
+  --color-line: #e3dac6;
+  --color-line-strong: #cdc1a8;
+  --color-accent: #be3f29;
+  --color-accent-deep: #9c3320;
+  --color-accent-soft: #f0d9cf;
+  --color-success: #4f7a4a;
+
+  --font-display: "Shippori Mincho", "Hiragino Mincho ProN", serif;
+  --font-sans: "Zen Kaku Gothic New", "Hiragino Kaku Gothic ProN", sans-serif;
+
+  --radius-sm: 2px;
+  --radius: 4px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+:root {
+  color-scheme: light;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  /* 和紙の繊維を思わせる、ごく淡いノイズと斜めの色味 */
+  background-image:
+    radial-gradient(circle at 18% 12%, rgba(190, 63, 41, 0.04), transparent 42%),
+    radial-gradient(circle at 88% 84%, rgba(120, 110, 80, 0.06), transparent 50%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  background-attachment: fixed;
+}
+
+/* セレクション */
+::selection {
+  background: var(--color-accent);
+  color: #fff;
+}
+
+/* スクロールバー（控えめ） */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-line-strong) transparent;
+}
+
+/* 縦書きの落款風アクセントなどに使う等幅数値 */
+.tnum {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ページロード時のステップ出現 */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes seal-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.4) rotate(-12deg);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.08) rotate(2deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+.animate-rise {
+  animation: rise 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.animate-fade {
+  animation: fade 0.5s ease both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-rise,
+  .animate-fade {
+    animation: none;
+  }
+}
+
+/* フォーカスリング統一 */
+.focus-ink:focus-visible {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px var(--color-accent-soft);
 }
