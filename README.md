@@ -74,8 +74,6 @@ slack-to-cv/
 │   └── index.ts                  # 共通型定義
 ├── public/                       # SVG アセット
 ├── storage/                      # 動作確認用の出力サンプル（.gitignore 対象）
-│   ├── hv_レジステイ_messages.json
-│   └── resume_draft.md
 ├── task/
 │   └── todo.md
 ├── .env                          # Slack トークン等（コミットしない）
