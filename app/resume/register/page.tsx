@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import type { ChannelFormValues, MessagesPayload, SlackChannel } from "@/types";
-import { ChannelFormSchema, Step1Schema } from "@/constants/validation";
+import { ChannelFormSchema, Step1Schema } from "@/schemas/validation";
 import LoadingOverlay from "@/components/LoadingOverlay";
 import DateRangePicker from "@/components/DateRangePicker";
 import ChannelSelector from "@/components/ChannelSelector";
