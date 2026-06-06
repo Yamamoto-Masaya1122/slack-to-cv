@@ -72,9 +72,27 @@ function formatTs(ts: string): string {
   return `${get("year")}-${get("month")}-${get("day")} ${get("hour")}:${get("minute")}`;
 }
 
+// 並べ替え用に元のts(数値)を保持した抽出メッセージ
+type CollectedMessage = ExtractedMessage & { rawTs: number };
+
+/** SlackメッセージがSLACK_USER_IDの有効な発言かを判定し、textを返す（除外時はnull） */
+function pickOwnText(
+  m: { user?: string; subtype?: string; text?: string },
+  userId: string,
+): string | null {
+  if (m.user !== userId) return null;
+  if (m.subtype) return null; // join/leave等のシステムメッセージを除外
+  const text = (m.text ?? "").trim();
+  return text || null;
+}
+
 /**
  * 指定チャンネル・期間内の、本人(SLACK_USER_ID)が投稿したメッセージを抽出する。
+ * トップレベル投稿に加え、スレッド返信(本人分)も取得する。
  * システムメッセージ(join等)や空メッセージは除外。古い順に並べる。
+ *
+ * 注: 期間内に本人が返信していても、スレッドの親メッセージが期間より前にある場合は
+ * historyに親が現れないため、そのスレッドの返信は取得対象外となる。
  */
 export async function fetchMessages(
   channelId: string,
@@ -84,8 +102,12 @@ export async function fetchMessages(
   const { userId } = getEnv();
   const client = getClient();
   const { oldest, latest } = dateToUnixRange(from, to);
+  const oldestNum = Number(oldest);
+  const latestNum = Number(latest);
 
-  const collected: ExtractedMessage[] = [];
+  const collected: CollectedMessage[] = [];
+  // 返信を後で取得するスレッド親のts（投稿者を問わず収集）
+  const threadParents = new Set<string>();
   let cursor: string | undefined;
 
   do {
@@ -113,20 +135,45 @@ export async function fetchMessages(
     }
 
     for (const m of res.messages ?? []) {
-      if (m.user !== userId) continue;
-      if (m.subtype) continue; // join/leave等のシステムメッセージを除外
-      const text = (m.text ?? "").trim();
+      // 返信が存在するスレッド親を記録（本人が返信している可能性があるため投稿者不問）
+      if (m.thread_ts && m.reply_count && m.reply_count > 0) {
+        threadParents.add(m.thread_ts);
+      }
+      const text = pickOwnText(m, userId);
       if (!text) continue;
-      const isReply = Boolean(m.thread_ts && m.thread_ts !== m.ts);
-      collected.push({
-        type: isReply ? "reply" : "posted",
-        text,
-        ts: formatTs(m.ts ?? "0"),
-      });
+      // historyが返すのはトップレベル/スレッド親なので "posted"
+      collected.push({ type: "posted", text, ts: formatTs(m.ts ?? "0"), rawTs: Number(m.ts) });
     }
     cursor = res.response_metadata?.next_cursor || undefined;
   } while (cursor);
 
-  // historyは新しい順で返るため、古い順に並べ替える
-  return collected.reverse();
+  // 各スレッドの返信を取得し、本人の返信(期間内)を抽出する
+  for (const threadTs of threadParents) {
+    let rCursor: string | undefined;
+    do {
+      const rres = await client.conversations.replies({
+        channel: channelId,
+        ts: threadTs,
+        oldest,
+        latest,
+        inclusive: true,
+        limit: 200,
+        cursor: rCursor,
+      });
+      for (const m of rres.messages ?? []) {
+        if (m.ts === threadTs) continue; // 親はhistory側で処理済み
+        const rawTs = Number(m.ts);
+        if (rawTs < oldestNum || rawTs > latestNum) continue; // 念のため期間外を除外
+        const text = pickOwnText(m, userId);
+        if (!text) continue;
+        collected.push({ type: "reply", text, ts: formatTs(m.ts ?? "0"), rawTs });
+      }
+      rCursor = rres.response_metadata?.next_cursor || undefined;
+    } while (rCursor);
+  }
+
+  // history/repliesを混在させたため、元のtsで古い順に並べ替える
+  return collected
+    .sort((a, b) => a.rawTs - b.rawTs)
+    .map(({ rawTs: _rawTs, ...rest }) => rest);
 }

@@ -7,6 +7,7 @@ import LoadingOverlay from "@/components/LoadingOverlay";
 import DateRangePicker from "@/components/DateRangePicker";
 import ChannelSelector from "@/components/ChannelSelector";
 import ChannelForm, { type ChannelFormErrors } from "@/components/ChannelForm";
+import { saveResumeAction } from "../../../actions/resume/actions";
 
 type Step = 1 | 2;
 
@@ -28,63 +29,6 @@ function collectErrors(issues: { path: PropertyKey[]; message: string }[]): Reco
     if (key && !map[key]) map[key] = issue.message;
   }
   return map;
-}
-
-function buildResumeDraft(channel: string, form: ChannelFormValues): string {
-  const periodFrom = `${form.periodFrom.year}年${form.periodFrom.month}月`;
-  const periodTo = `${form.periodTo.year}年${form.periodTo.month}月`;
-  return `# 職務経歴書生成指示
-
-## あなたへのお願い
-このファイルと同梱の \`${channel}_messages.json\` を元に、
-「プロジェクト詳細・担当業務・主な実績」を生成してください。
-
-## 生成ルール
-以下のフォーマットを厳守してください。
-
-▼担当業務
-（担当した業務の概要・開発フェーズを1〜2文で）
-
-▼詳細
-■ Situation（状況）: どんなプロジェクト・チーム環境だったかを文章で
-■ Task（課題）: どんな問題・課題があったかを文章で
-■ Action（行動）: 課題に対して具体的に何をしたかを文章で
-■ Result（結果）: 成果を文章で。可能な限り数値・割合・時間で定量表現
-
-## 制約
-- 全体400文字以内で出力すること
-- Slackメッセージから読み取れない情報は根拠なく作らないこと
-- 推測が必要な場合は合理的な範囲にとどめること
-- 生成完了後はMarkdown形式でターミナルに表示すること
-
----
-
-## プロジェクト情報
-
-- チャンネル: ${channel}
-- 期間: ${periodFrom}〜${periodTo}
-- 職種: ${form.jobTitle}
-- 役割: ${form.role}
-- チーム規模: ${form.teamSize}
-- 仕事内容: ${form.jobDescription}
-- 利用技術: ${form.technologies.join("、")}
-
-### プロジェクト詳細・担当業務・主な実績
-<!-- ここをClaude Codeが埋める -->
-`;
-}
-
-function downloadBlob(filename: string, content: string, mime: string) {
-  const blob = new Blob([content], { type: mime });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  // 連続ダウンロードでrevokeが早すぎないよう少し遅延
-  setTimeout(() => URL.revokeObjectURL(url), 1500);
 }
 
 export default function RegisterPage() {
@@ -109,6 +53,9 @@ export default function RegisterPage() {
   // --- Step2 状態 ---
   const [form, setForm] = useState<ChannelFormValues>(EMPTY_FORM);
   const [formErrors, setFormErrors] = useState<ChannelFormErrors>({});
+  const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState<string>();
+  const [savedSequence, setSavedSequence] = useState<string>();
 
   useEffect(() => {
     let cancelled = false;
@@ -167,8 +114,11 @@ export default function RegisterPage() {
     }
   };
 
-  // Step2 → 2ファイルダウンロード
-  const handleDownload = () => {
+  // Step2 → storage/<YYYYMMDDHHMMSS>/ に2ファイルを保存
+  const handleSave = async () => {
+    setSaveError(undefined);
+    setSavedSequence(undefined);
+
     const result = ResumeFormSchema.safeParse(form);
     if (!result.success) {
       setFormErrors(collectErrors(result.error.issues) as ChannelFormErrors);
@@ -177,13 +127,19 @@ export default function RegisterPage() {
     setFormErrors({});
     if (!payload) return;
 
-    const channel = payload.channel;
-    downloadBlob(
-      `${channel}_messages.json`,
-      JSON.stringify(payload, null, 2),
-      "application/json",
-    );
-    downloadBlob(`resume_draft.md`, buildResumeDraft(channel, form), "text/markdown");
+    setSaving(true);
+    try {
+      const res = await saveResumeAction(payload, form);
+      if (!res.ok) {
+        setSaveError(res.error);
+        return;
+      }
+      setSavedSequence(res.sequence);
+    } catch (e) {
+      setSaveError(e instanceof Error ? e.message : "ファイルの保存に失敗しました");
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
@@ -302,15 +258,28 @@ export default function RegisterPage() {
               <ChannelForm
                 values={form}
                 errors={formErrors}
+                submitting={saving}
                 onChange={(patch) => setForm((prev) => ({ ...prev, ...patch }))}
-                onSubmit={handleDownload}
+                onSubmit={handleSave}
               />
+
+              {savedSequence && (
+                <div className="animate-fade mt-5 rounded border border-line bg-surface-raised px-4 py-3 text-[13px] text-ink-soft">
+                  <span className="font-medium text-ink">保存しました。</span>{" "}
+                  <code className="tnum">storage/{savedSequence}/</code> に2ファイルを書き出しました。
+                </div>
+              )}
+              {saveError && (
+                <div className="animate-fade mt-5 rounded border border-line bg-surface-raised px-4 py-3 text-[13px] text-red-600">
+                  {saveError}
+                </div>
+              )}
             </section>
           )}
         </main>
 
         <footer className="animate-fade mt-8 text-center text-[12px] text-ink-faint [animation-delay:240ms]">
-          ローカル動作・メッセージは保存されません — 書き出したファイルをClaude Codeに渡して生成します。
+          書き出したファイルは storage/ 配下に保存されます — そのファイルをClaude Codeに渡して生成します。
         </footer>
       </div>
     </div>

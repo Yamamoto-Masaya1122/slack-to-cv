@@ -8,6 +8,7 @@ export type ChannelFormErrors = Partial<Record<keyof ChannelFormValues, string>>
 interface ChannelFormProps {
   values: ChannelFormValues;
   errors: ChannelFormErrors;
+  submitting?: boolean;
   onChange: (patch: Partial<ChannelFormValues>) => void;
   onSubmit: () => void;
 }
@@ -58,7 +59,7 @@ function TextField({ id, label, placeholder, value, error, multiline, onChange }
 }
 
 /** Step2: 職務経歴書作成フォーム全体 */
-export default function ChannelForm({ values, errors, onChange, onSubmit }: ChannelFormProps) {
+export default function ChannelForm({ values, errors, submitting, onChange, onSubmit }: ChannelFormProps) {
   return (
     <form
       onSubmit={(e) => {
@@ -128,20 +129,21 @@ export default function ChannelForm({ values, errors, onChange, onSubmit }: Chan
         error={errors.technologies}
       />
 
-      {/* ダウンロードボタン */}
+      {/* 保存ボタン */}
       <div className="pt-1">
         <button
           type="submit"
-          className="group relative flex w-full items-center justify-center gap-2.5 overflow-hidden rounded bg-ink px-6 py-4 text-[15px] font-medium tracking-wide text-paper transition-all hover:bg-accent-deep focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
+          disabled={submitting}
+          className="group relative flex w-full items-center justify-center gap-2.5 overflow-hidden rounded bg-ink px-6 py-4 text-[15px] font-medium tracking-wide text-paper transition-all hover:bg-accent-deep focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface disabled:cursor-not-allowed disabled:opacity-60"
         >
           <svg viewBox="0 0 20 20" className="h-[18px] w-[18px]" fill="none" stroke="currentColor" strokeWidth="1.7">
             <path d="M10 3v10m0 0 4-4m-4 4-4-4" strokeLinecap="round" strokeLinejoin="round" />
             <path d="M4 16.5h12" strokeLinecap="round" />
           </svg>
-          ファイルをダウンロード
+          {submitting ? "保存中..." : "ファイルを保存"}
         </button>
         <p className="mt-2.5 text-center text-[12px] text-ink-faint">
-          messages.json と resume_draft.md の2ファイルを書き出します
+          messages.json と resume_draft.md の2ファイルを storage/ に書き出します
         </p>
       </div>
     </form>
