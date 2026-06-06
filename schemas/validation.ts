@@ -1,7 +1,7 @@
 import { z } from "zod";
 
-// --- Step1: 初期設定（期間・チャンネル選択） ---
-export const Step1Schema = z
+// --- 初期設定（期間・チャンネル選択） ---
+export const InitialSettingSchema = z
   .object({
     dateFrom: z.string().min(1, "開始日を入力してください"),
     dateTo: z.string().min(1, "終了日を入力してください"),
@@ -12,13 +12,13 @@ export const Step1Schema = z
     path: ["dateTo"],
   });
 
-export type Step1Input = z.infer<typeof Step1Schema>;
+export type InitialSettingInput = z.infer<typeof InitialSettingSchema>;
 
-// --- Step2: 職務経歴書作成フォーム ---
+// --- 職務経歴書作成フォーム ---
 const yearMonthOrder = (ym: { year: string; month: string }): number =>
   Number(ym.year) * 100 + Number(ym.month);
 
-export const ChannelFormSchema = z
+export const ResumeFormSchema = z
   .object({
     periodFrom: z.object({
       year: z.string().min(1, "開始年月を入力してください"),
@@ -46,4 +46,4 @@ export const ChannelFormSchema = z
     },
   );
 
-export type ChannelFormInput = z.infer<typeof ChannelFormSchema>;
+export type ResumeFormInput = z.infer<typeof ResumeFormSchema>;

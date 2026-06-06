@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import type { ChannelFormValues, MessagesPayload, SlackChannel } from "@/types";
-import { ChannelFormSchema, Step1Schema } from "@/schemas/validation";
+import { ResumeFormSchema, InitialSettingSchema } from "@/schemas/validation";
 import LoadingOverlay from "@/components/LoadingOverlay";
 import DateRangePicker from "@/components/DateRangePicker";
 import ChannelSelector from "@/components/ChannelSelector";
@@ -136,7 +136,7 @@ export default function RegisterPage() {
   // Step1 → メッセージ取得 → Step2
   const handleStep1Submit = async () => {
     setFetchError(undefined);
-    const result = Step1Schema.safeParse({ dateFrom, dateTo, channelId });
+    const result = InitialSettingSchema.safeParse({ dateFrom, dateTo, channelId });
     if (!result.success) {
       setStep1Errors(collectErrors(result.error.issues));
       return;
@@ -169,7 +169,7 @@ export default function RegisterPage() {
 
   // Step2 → 2ファイルダウンロード
   const handleDownload = () => {
-    const result = ChannelFormSchema.safeParse(form);
+    const result = ResumeFormSchema.safeParse(form);
     if (!result.success) {
       setFormErrors(collectErrors(result.error.issues) as ChannelFormErrors);
       return;
