@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import type { ChannelFormValues } from "@/types/resume";
 import type { SlackChannel, SlackMessagesPayload } from "@/types/slack";
 import { ResumeFormSchema, InitialSettingSchema } from "@/schemas/validation";
+import { toast } from "sonner";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Check } from "lucide-react";
@@ -51,15 +52,12 @@ export default function RegisterPage() {
 
   // --- 取得処理 ---
   const [fetching, setFetching] = useState(false);
-  const [fetchError, setFetchError] = useState<string>();
   const [payload, setPayload] = useState<SlackMessagesPayload | null>(null);
 
   // --- Step2 状態 ---
   const [form, setForm] = useState<ChannelFormValues>(EMPTY_FORM);
   const [formErrors, setFormErrors] = useState<ChannelFormErrors>({});
   const [saving, setSaving] = useState(false);
-  const [saveError, setSaveError] = useState<string>();
-  const [savedSequence, setSavedSequence] = useState<string>();
 
   useEffect(() => {
     let cancelled = false;
@@ -86,7 +84,6 @@ export default function RegisterPage() {
 
   // Step1 → メッセージ取得 → Step2
   const handleStep1Submit = async () => {
-    setFetchError(undefined);
     const result = InitialSettingSchema.safeParse({ dateFrom, dateTo, channelId });
     if (!result.success) {
       setStep1Errors(collectErrors(result.error.issues));
@@ -109,10 +106,12 @@ export default function RegisterPage() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data?.error ?? "メッセージの取得に失敗しました");
-      setPayload(data as SlackMessagesPayload);
+      const result = data as SlackMessagesPayload;
+      setPayload(result);
       setStep(2);
+      toast.success(`# ${result.channel} から ${result.messages.length} 件のメッセージを取得しました`);
     } catch (e) {
-      setFetchError(e instanceof Error ? e.message : "メッセージの取得に失敗しました");
+      toast.error(e instanceof Error ? e.message : "メッセージの取得に失敗しました");
     } finally {
       setFetching(false);
     }
@@ -120,9 +119,6 @@ export default function RegisterPage() {
 
   // Step2 → storage/<YYYYMMDDHHMMSS>/ に2ファイルを保存
   const handleSave = async () => {
-    setSaveError(undefined);
-    setSavedSequence(undefined);
-
     const result = ResumeFormSchema.safeParse(form);
     if (!result.success) {
       setFormErrors(collectErrors(result.error.issues) as ChannelFormErrors);
@@ -135,12 +131,12 @@ export default function RegisterPage() {
     try {
       const res = await saveResumeAction(payload, form);
       if (!res.ok) {
-        setSaveError(res.error);
+        toast.error(res.error);
         return;
       }
-      setSavedSequence(res.sequence);
+      toast.success(`保存しました。storage/${res.sequence}/ に2ファイルを書き出しました`);
     } catch (e) {
-      setSaveError(e instanceof Error ? e.message : "ファイルの保存に失敗しました");
+      toast.error(e instanceof Error ? e.message : "ファイルの保存に失敗しました");
     } finally {
       setSaving(false);
     }
@@ -197,15 +193,6 @@ export default function RegisterPage() {
                 error={step1Errors.channelId}
               />
 
-              {fetchError && (
-                <p
-                  role="alert"
-                  className="animate-fade rounded-lg border border-destructive/30 bg-destructive/5 px-4 py-3 text-[13px] text-destructive"
-                >
-                  {fetchError}
-                </p>
-              )}
-
               <Button
                 type="button"
                 onClick={handleStep1Submit}
@@ -228,28 +215,12 @@ export default function RegisterPage() {
                 <Button
                   type="button"
                   variant="link"
-                  onClick={() => {
-                    setStep(1);
-                    setFetchError(undefined);
-                  }}
+                  onClick={() => setStep(1)}
                   className="h-auto shrink-0 p-0 text-[13px] text-muted-foreground hover:text-primary"
                 >
                   ← 設定に戻る
                 </Button>
               </div>
-
-              {/* 取得結果バナー */}
-              {payload && (
-                <div className="animate-fade flex items-center gap-2.5 rounded-lg border border-success/25 bg-success/5 px-4 py-3 text-[13px] text-muted-foreground">
-                  <span className="flex size-5 shrink-0 items-center justify-center rounded-full bg-success/15 text-success">
-                    <Check className="size-3" strokeWidth={3} />
-                  </span>
-                  <span>
-                    <span className="font-medium text-foreground">#&nbsp;{payload.channel}</span> から{" "}
-                    <span className="tnum font-medium text-foreground">{payload.messages.length}</span> 件のメッセージを取得しました
-                  </span>
-                </div>
-              )}
 
               <ChannelForm
                 values={form}
@@ -258,18 +229,6 @@ export default function RegisterPage() {
                 onChange={(patch) => setForm((prev) => ({ ...prev, ...patch }))}
                 onSubmit={handleSave}
               />
-
-              {savedSequence && (
-                <div className="animate-fade mt-5 rounded-lg border border-success/25 bg-success/5 px-4 py-3 text-[13px] text-muted-foreground">
-                  <span className="font-medium text-foreground">保存しました。</span>{" "}
-                  <code className="tnum">storage/{savedSequence}/</code> に2ファイルを書き出しました。
-                </div>
-              )}
-              {saveError && (
-                <div className="animate-fade mt-5 rounded-lg border border-destructive/30 bg-destructive/5 px-4 py-3 text-[13px] text-destructive">
-                  {saveError}
-                </div>
-              )}
             </section>
           )}
         </Card>
