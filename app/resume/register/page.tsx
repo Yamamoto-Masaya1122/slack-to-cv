@@ -166,6 +166,19 @@ export default function RegisterPage() {
           <StepBadge index={2} label="作成" active={step === 2} done={false} />
         </ol>
 
+        {step === 2 && (
+          <div className="mb-3">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setStep(1)}
+              className="animate-fade"
+            >
+              ← 設定に戻る
+            </Button>
+          </div>
+        )}
+
         {/* カード本体 */}
         <Card className="animate-rise gap-0 overflow-visible p-6 shadow-sm [animation-delay:160ms] sm:p-9">
           {step === 1 ? (
@@ -205,19 +218,9 @@ export default function RegisterPage() {
             </section>
           ) : (
             <section className="space-y-7">
-              <div className="flex items-start justify-between gap-4">
-                <div className="flex items-center gap-1.5">
-                  <h2 className="text-lg font-semibold text-foreground">プロジェクト情報の入力</h2>
-                  <HelpTooltip text="入力内容をもとに、生成指示ファイルを書き出します。書き出したファイル（messages.json と resume_draft.md）は storage/ 配下に保存され、そのファイルをClaude Codeに渡して生成します。" />
-                </div>
-                <Button
-                  type="button"
-                  variant="link"
-                  onClick={() => setStep(1)}
-                  className="h-auto shrink-0 p-0 text-[13px] text-muted-foreground hover:text-primary"
-                >
-                  ← 設定に戻る
-                </Button>
+              <div className="flex items-center gap-1.5">
+                <h2 className="text-lg font-semibold text-foreground">プロジェクト情報の入力</h2>
+                <HelpTooltip text="入力内容をもとに、生成指示ファイルを書き出します。書き出したファイル（messages.json と resume_draft.md）は storage/ 配下に保存され、そのファイルをClaude Codeに渡して生成します。" />
               </div>
 
               <ChannelForm
