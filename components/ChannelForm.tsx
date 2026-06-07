@@ -141,9 +141,6 @@ export default function ChannelForm({ values, errors, submitting, onChange, onSu
           <ArrowDownToLine className="size-[18px]" />
           {submitting ? "保存中..." : "ファイルを保存"}
         </Button>
-        <p className="mt-2.5 text-center text-xs text-muted-foreground">
-          messages.json と resume_draft.md の2ファイルを storage/ に書き出します
-        </p>
       </div>
     </form>
   );

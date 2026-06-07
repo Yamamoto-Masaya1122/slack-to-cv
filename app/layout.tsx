@@ -3,6 +3,7 @@ import "./globals.css";
 import { Inter, Noto_Sans_JP } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { Toaster } from "@/components/ui/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -34,7 +35,7 @@ export default function RootLayout({
       className={cn("h-full", "font-sans", inter.variable, notoSansJp.variable)}
     >
       <body className="min-h-full">
-        {children}
+        <TooltipProvider delayDuration={200}>{children}</TooltipProvider>
         <Toaster richColors position="top-center" />
       </body>
     </html>

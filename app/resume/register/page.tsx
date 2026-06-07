@@ -12,6 +12,7 @@ import LoadingOverlay from "@/components/LoadingOverlay";
 import DateRangePicker from "@/components/DateRangePicker";
 import ChannelSelector from "@/components/ChannelSelector";
 import ChannelForm, { type ChannelFormErrors } from "@/components/ChannelForm";
+import HelpTooltip from "@/components/HelpTooltip";
 import { saveResumeAction } from "../../../actions/resume/actions";
 
 type Step = 1 | 2;
@@ -168,11 +169,9 @@ export default function RegisterPage() {
         <Card className="animate-rise gap-0 overflow-visible p-6 shadow-sm [animation-delay:160ms] sm:p-9">
           {step === 1 ? (
             <section className="space-y-7">
-              <div>
+              <div className="flex items-center gap-1.5">
                 <h2 className="text-lg font-semibold text-foreground">対象期間とチャンネル</h2>
-                <p className="mt-1 text-sm text-muted-foreground">
-                  経歴書に反映したい会話の期間と、対象のSlackチャンネルを選んでください。
-                </p>
+                <HelpTooltip text="経歴書に反映したい会話の期間と、対象のSlackチャンネルを選んでください。" />
               </div>
 
               <DateRangePicker
@@ -206,11 +205,9 @@ export default function RegisterPage() {
           ) : (
             <section className="space-y-7">
               <div className="flex items-start justify-between gap-4">
-                <div>
+                <div className="flex items-center gap-1.5">
                   <h2 className="text-lg font-semibold text-foreground">プロジェクト情報の入力</h2>
-                  <p className="mt-1 text-sm text-muted-foreground">
-                    入力内容をもとに、生成指示ファイルを書き出します。
-                  </p>
+                  <HelpTooltip text="入力内容をもとに、生成指示ファイルを書き出します。書き出したファイル（messages.json と resume_draft.md）は storage/ 配下に保存され、そのファイルをClaude Codeに渡して生成します。" />
                 </div>
                 <Button
                   type="button"
@@ -232,10 +229,6 @@ export default function RegisterPage() {
             </section>
           )}
         </Card>
-
-        <footer className="animate-fade mt-8 text-center text-xs text-muted-foreground [animation-delay:240ms]">
-          書き出したファイルは storage/ 配下に保存されます — そのファイルをClaude Codeに渡して生成します。
-        </footer>
       </div>
     </div>
   );
