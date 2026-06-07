@@ -1,4 +1,4 @@
-import type { ChannelFormValues } from "@/types";
+import type { ChannelFormValues } from "@/types/resume";
 import MonthRangePicker from "./MonthRangePicker";
 import TechTagInput from "./TechTagInput";
 import ErrorMessage from "./ErrorMessage";

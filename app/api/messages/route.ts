@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { fetchChannels, fetchMessages } from "@/lib/slack";
-import type { MessagesPayload } from "@/types";
+import type { SlackMessagesPayload } from "@/types/slack";
 
 export const dynamic = "force-dynamic";
 
@@ -40,7 +40,7 @@ export async function POST(request: Request) {
   const { channelId, channelName, from, to } = parsed.data;
   try {
     const messages = await fetchMessages(channelId, from, to);
-    const payload: MessagesPayload = {
+    const payload: SlackMessagesPayload = {
       channel: channelName,
       period: { from, to },
       messages,

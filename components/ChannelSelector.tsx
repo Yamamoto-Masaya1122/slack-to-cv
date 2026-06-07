@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import type { SlackChannel } from "@/types";
+import type { SlackChannel } from "@/types/slack";
 import ErrorMessage from "./ErrorMessage";
 
 interface ChannelSelectorProps {

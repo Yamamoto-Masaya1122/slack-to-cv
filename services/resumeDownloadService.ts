@@ -1,6 +1,7 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
-import type { ChannelFormValues, MessagesPayload } from "@/types";
+import type { ChannelFormValues } from "@/types/resume";
+import type { SlackMessagesPayload } from "@/types/slack";
 
 /** ダウンロードファイルの保存ルート（プロジェクト直下 storage/） */
 const STORAGE_ROOT = path.join(process.cwd(), "storage");
@@ -84,7 +85,7 @@ export interface SaveResumeResult {
  * 保存先ディレクトリ情報を返す。
  */
 export async function saveResumeFiles(
-  payload: MessagesPayload,
+  payload: SlackMessagesPayload,
   form: ChannelFormValues,
 ): Promise<SaveResumeResult> {
   const channel = sanitizeChannelName(payload.channel);

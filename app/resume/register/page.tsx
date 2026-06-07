@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import type { ChannelFormValues, MessagesPayload, SlackChannel } from "@/types";
+import type { ChannelFormValues } from "@/types/resume";
+import type { SlackChannel, SlackMessagesPayload } from "@/types/slack";
 import { ResumeFormSchema, InitialSettingSchema } from "@/schemas/validation";
 import LoadingOverlay from "@/components/LoadingOverlay";
 import DateRangePicker from "@/components/DateRangePicker";
@@ -48,7 +49,7 @@ export default function RegisterPage() {
   // --- 取得処理 ---
   const [fetching, setFetching] = useState(false);
   const [fetchError, setFetchError] = useState<string>();
-  const [payload, setPayload] = useState<MessagesPayload | null>(null);
+  const [payload, setPayload] = useState<SlackMessagesPayload | null>(null);
 
   // --- Step2 状態 ---
   const [form, setForm] = useState<ChannelFormValues>(EMPTY_FORM);
@@ -105,7 +106,7 @@ export default function RegisterPage() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data?.error ?? "メッセージの取得に失敗しました");
-      setPayload(data as MessagesPayload);
+      setPayload(data as SlackMessagesPayload);
       setStep(2);
     } catch (e) {
       setFetchError(e instanceof Error ? e.message : "メッセージの取得に失敗しました");

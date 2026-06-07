@@ -2,7 +2,8 @@
 
 import { ResumeFormSchema } from "@/schemas/validation";
 import { saveResumeFiles } from "@/services/resumeDownloadService";
-import type { ChannelFormValues, MessagesPayload } from "@/types";
+import type { ChannelFormValues } from "@/types/resume";
+import type { SlackMessagesPayload } from "@/types/slack";
 
 export type SaveResumeActionResult =
   | { ok: true; sequence: string; dir: string }
@@ -13,7 +14,7 @@ export type SaveResumeActionResult =
  * 実際の保存処理は services/resumeStorageService に委譲する。
  */
 export async function saveResumeAction(
-  payload: MessagesPayload,
+  payload: SlackMessagesPayload,
   form: ChannelFormValues,
 ): Promise<SaveResumeActionResult> {
   const parsed = ResumeFormSchema.safeParse(form);

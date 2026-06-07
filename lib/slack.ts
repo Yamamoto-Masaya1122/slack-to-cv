@@ -1,5 +1,5 @@
 import { WebClient } from "@slack/web-api";
-import type { ExtractedMessage, SlackChannel } from "@/types";
+import type { SlackChannel, SlackExtractedMessage } from "@/types/slack";
 
 function getEnv(): { token: string; userId: string } {
   const token = process.env.SLACK_USER_TOKEN;
@@ -73,7 +73,7 @@ function formatTs(ts: string): string {
 }
 
 // 並べ替え用に元のts(数値)を保持した抽出メッセージ
-type CollectedMessage = ExtractedMessage & { rawTs: number };
+type CollectedMessage = SlackExtractedMessage & { rawTs: number };
 
 /** SlackメッセージがSLACK_USER_IDの有効な発言かを判定し、textを返す（除外時はnull） */
 function pickOwnText(
@@ -98,7 +98,7 @@ export async function fetchMessages(
   channelId: string,
   from: string,
   to: string,
-): Promise<ExtractedMessage[]> {
+): Promise<SlackExtractedMessage[]> {
   const { userId } = getEnv();
   const client = getClient();
   const { oldest, latest } = dateToUnixRange(from, to);
