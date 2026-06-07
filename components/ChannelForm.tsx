@@ -76,8 +76,12 @@ export default function ChannelForm({ values, errors, submitting, onChange, onSu
         <MonthRangePicker
           periodFrom={values.periodFrom}
           periodTo={values.periodTo}
+          ongoing={values.ongoing}
           onChangeFrom={(periodFrom) => onChange({ periodFrom })}
           onChangeTo={(periodTo) => onChange({ periodTo })}
+          onToggleOngoing={(ongoing) =>
+            onChange(ongoing ? { ongoing, periodTo: { year: "", month: "" } } : { ongoing })
+          }
           errorFrom={errors.periodFrom}
           errorTo={errors.periodTo}
         />

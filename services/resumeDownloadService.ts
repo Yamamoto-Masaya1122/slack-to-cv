@@ -27,7 +27,7 @@ function sanitizeChannelName(channel: string): string {
 /** resume_draft.md の本文を生成 */
 export function buildResumeDraft(channel: string, form: ChannelFormValues): string {
   const periodFrom = `${form.periodFrom.year}年${form.periodFrom.month}月`;
-  const periodTo = `${form.periodTo.year}年${form.periodTo.month}月`;
+  const periodTo = form.ongoing ? "現在" : `${form.periodTo.year}年${form.periodTo.month}月`;
   return `# 職務経歴書生成指示
 
 ## あなたへのお願い

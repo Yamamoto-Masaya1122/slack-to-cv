@@ -20,6 +20,7 @@ type Step = 1 | 2;
 const EMPTY_FORM: ChannelFormValues = {
   periodFrom: { year: "", month: "" },
   periodTo: { year: "", month: "" },
+  ongoing: false,
   jobTitle: "",
   role: "",
   teamSize: "",

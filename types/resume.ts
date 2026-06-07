@@ -9,6 +9,8 @@ export type InitialSettingValues = {
 export type ChannelFormValues = {
   periodFrom: { year: string; month: string };
   periodTo: { year: string; month: string };
+  /** プロジェクトが進行中（終了年月なし）か */
+  ongoing: boolean;
   jobTitle: string;
   role: string;
   teamSize: string;
