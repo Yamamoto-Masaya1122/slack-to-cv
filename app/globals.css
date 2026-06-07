@@ -7,30 +7,30 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
-  Aesthetic direction: "Document craft / editorial"
-  和紙(washi)風の温かいオフホワイト地に、墨色のタイポグラフィ、
-  朱色(vermilion)を一点アクセントに使うエディトリアルな職務経歴書ツール。
+  Aesthetic direction: "Modern SaaS / Vercel-clean"
+  白〜薄グレー(slate)地に slate のテキスト、青(#2563eb)を一点アクセントに使う
+  クリーンでプロダクト的な職務経歴書ツール。
 */
 
 @theme inline {
-  --color-paper: #f3ede0;
-  --color-surface: #fbf7ee;
+  --color-paper: #f8fafc;
+  --color-surface: #ffffff;
   --color-surface-raised: #ffffff;
-  --color-ink: #211e1a;
-  --color-ink-soft: #5b554c;
-  --color-ink-faint: #948d80;
-  --color-line: #e3dac6;
-  --color-line-strong: #cdc1a8;
-  --color-accent: #be3f29;
-  --color-accent-deep: #9c3320;
-  --color-accent-soft: #f0d9cf;
-  --color-success: #4f7a4a;
+  --color-ink: #0f172a;
+  --color-ink-soft: #475569;
+  --color-ink-faint: #94a3b8;
+  --color-line: #e2e8f0;
+  --color-line-strong: #cbd5e1;
+  --color-accent: #2563eb;
+  --color-accent-deep: #1d4ed8;
+  --color-accent-soft: #eff6ff;
+  --color-success: #16a34a;
 
-  --font-display: "Shippori Mincho", "Hiragino Mincho ProN", serif;
-  --font-sans: var(--font-sans);
+  --font-display: var(--font-inter), var(--font-noto), system-ui, sans-serif;
+  --font-sans: var(--font-inter), var(--font-noto), system-ui, sans-serif;
 
-  --radius-sm: 2px;
-  --radius: 4px;
+  --radius-sm: 4px;
+  --radius: 8px;
   --font-heading: var(--font-sans);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
@@ -72,38 +72,38 @@
 
 :root {
   color-scheme: light;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --background: #f8fafc;
+  --foreground: #0f172a;
+  --card: #ffffff;
+  --card-foreground: #0f172a;
+  --popover: #ffffff;
+  --popover-foreground: #0f172a;
+  --primary: #2563eb;
+  --primary-foreground: #ffffff;
+  --secondary: #f1f5f9;
+  --secondary-foreground: #0f172a;
+  --muted: #f1f5f9;
+  --muted-foreground: #64748b;
+  --accent: #f1f5f9;
+  --accent-foreground: #0f172a;
+  --destructive: #dc2626;
+  --border: #e2e8f0;
+  --input: #e2e8f0;
+  --ring: #2563eb;
+  --chart-1: #2563eb;
+  --chart-2: #0d9488;
+  --chart-3: #16a34a;
+  --chart-4: #f59e0b;
+  --chart-5: #64748b;
+  --radius: 0.5rem;
+  --sidebar: #ffffff;
+  --sidebar-foreground: #0f172a;
+  --sidebar-primary: #2563eb;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #f1f5f9;
+  --sidebar-accent-foreground: #0f172a;
+  --sidebar-border: #e2e8f0;
+  --sidebar-ring: #2563eb;
 }
 
 html {
@@ -115,12 +115,6 @@ body {
   background-color: var(--color-paper);
   color: var(--color-ink);
   font-family: var(--font-sans);
-  /* 和紙の繊維を思わせる、ごく淡いノイズと斜めの色味 */
-  background-image:
-    radial-gradient(circle at 18% 12%, rgba(190, 63, 41, 0.04), transparent 42%),
-    radial-gradient(circle at 88% 84%, rgba(120, 110, 80, 0.06), transparent 50%),
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
-  background-attachment: fixed;
 }
 
 /* セレクション */
@@ -135,7 +129,7 @@ body {
   scrollbar-color: var(--color-line-strong) transparent;
 }
 
-/* 縦書きの落款風アクセントなどに使う等幅数値 */
+/* 等幅数値 */
 .tnum {
   font-variant-numeric: tabular-nums;
 }
@@ -161,21 +155,6 @@ body {
   }
 }
 
-@keyframes seal-in {
-  0% {
-    opacity: 0;
-    transform: scale(0.4) rotate(-12deg);
-  }
-  60% {
-    opacity: 1;
-    transform: scale(1.08) rotate(2deg);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1) rotate(0deg);
-  }
-}
-
 .animate-rise {
   animation: rise 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
@@ -189,13 +168,6 @@ body {
   .animate-fade {
     animation: none;
   }
-}
-
-/* フォーカスリング統一 */
-.focus-ink:focus-visible {
-  outline: none;
-  border-color: var(--color-accent);
-  box-shadow: 0 0 0 3px var(--color-accent-soft);
 }
 /*
   ---break---

@@ -1,3 +1,10 @@
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import ErrorMessage from "./ErrorMessage";
 
 interface YearMonth {
@@ -17,75 +24,43 @@ interface MonthRangePickerProps {
 const YEARS: string[] = Array.from({ length: 28 }, (_, i) => String(2027 - i));
 const MONTHS: string[] = Array.from({ length: 12 }, (_, i) => String(i + 1));
 
-const selectClass =
-  "focus-ink appearance-none rounded border border-line bg-surface-raised py-2.5 pl-3.5 pr-9 text-[15px] text-ink tnum transition-colors hover:border-line-strong";
-
-function Chevron() {
-  return (
-    <svg
-      aria-hidden
-      viewBox="0 0 12 12"
-      className="pointer-events-none absolute right-3 top-1/2 h-3 w-3 -translate-y-1/2 text-ink-faint"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.6"
-    >
-      <path d="m2.5 4.5 3.5 3.5 3.5-3.5" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
-
-function YearMonthRow({
-  label,
-  value,
-  onChange,
-  idPrefix,
-  invalid,
-}: {
+interface YearMonthRowProps {
   label: string;
   value: YearMonth;
   onChange: (v: YearMonth) => void;
   idPrefix: string;
   invalid: boolean;
-}) {
+}
+
+function YearMonthRow({ label, value, onChange, idPrefix, invalid }: YearMonthRowProps) {
   return (
-    <div className="flex items-center gap-3">
-      <span className="w-16 shrink-0 text-[13px] font-medium text-ink-soft">{label}</span>
+    <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
+      <span className="text-sm font-medium text-muted-foreground sm:w-16 sm:shrink-0">{label}</span>
       <div className="flex items-center gap-2">
-        <div className="relative">
-          <select
-            id={`${idPrefix}-year`}
-            value={value.year}
-            onChange={(e) => onChange({ ...value, year: e.target.value })}
-            className={selectClass}
-            aria-invalid={invalid}
-          >
-            <option value="">年</option>
+        <Select value={value.year} onValueChange={(year) => onChange({ ...value, year })}>
+          <SelectTrigger id={`${idPrefix}-year`} aria-invalid={invalid} className="tnum h-10 w-28">
+            <SelectValue placeholder="年" />
+          </SelectTrigger>
+          <SelectContent>
             {YEARS.map((y) => (
-              <option key={y} value={y}>
+              <SelectItem key={y} value={y} className="tnum">
                 {y}年
-              </option>
+              </SelectItem>
             ))}
-          </select>
-          <Chevron />
-        </div>
-        <div className="relative">
-          <select
-            id={`${idPrefix}-month`}
-            value={value.month}
-            onChange={(e) => onChange({ ...value, month: e.target.value })}
-            className={selectClass}
-            aria-invalid={invalid}
-          >
-            <option value="">月</option>
+          </SelectContent>
+        </Select>
+        <Select value={value.month} onValueChange={(month) => onChange({ ...value, month })}>
+          <SelectTrigger id={`${idPrefix}-month`} aria-invalid={invalid} className="tnum h-10 w-24">
+            <SelectValue placeholder="月" />
+          </SelectTrigger>
+          <SelectContent>
             {MONTHS.map((m) => (
-              <option key={m} value={m}>
+              <SelectItem key={m} value={m} className="tnum">
                 {m}月
-              </option>
+              </SelectItem>
             ))}
-          </select>
-          <Chevron />
-        </div>
+          </SelectContent>
+        </Select>
       </div>
     </div>
   );

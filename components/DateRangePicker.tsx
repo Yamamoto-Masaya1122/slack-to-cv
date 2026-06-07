@@ -1,3 +1,5 @@
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import ErrorMessage from "./ErrorMessage";
 
 interface DateRangePickerProps {
@@ -8,9 +10,6 @@ interface DateRangePickerProps {
   errorFrom?: string;
   errorTo?: string;
 }
-
-const inputClass =
-  "focus-ink w-full rounded border border-line bg-surface-raised px-3.5 py-2.5 text-[15px] text-ink tnum transition-colors placeholder:text-ink-faint hover:border-line-strong";
 
 /** Step1: 開始日・終了日のDatePicker（type=date） */
 export default function DateRangePicker({
@@ -24,30 +23,30 @@ export default function DateRangePicker({
   return (
     <div className="grid gap-5 sm:grid-cols-2">
       <div>
-        <label htmlFor="dateFrom" className="mb-1.5 block text-[13px] font-medium text-ink-soft">
+        <Label htmlFor="dateFrom" className="mb-1.5 text-sm font-medium text-muted-foreground">
           開始日
-        </label>
-        <input
+        </Label>
+        <Input
           id="dateFrom"
           type="date"
           value={dateFrom}
           onChange={(e) => onChangeFrom(e.target.value)}
-          className={inputClass}
+          className="tnum h-10"
           aria-invalid={Boolean(errorFrom)}
         />
         <ErrorMessage message={errorFrom} />
       </div>
       <div>
-        <label htmlFor="dateTo" className="mb-1.5 block text-[13px] font-medium text-ink-soft">
+        <Label htmlFor="dateTo" className="mb-1.5 text-sm font-medium text-muted-foreground">
           終了日
-        </label>
-        <input
+        </Label>
+        <Input
           id="dateTo"
           type="date"
           value={dateTo}
           min={dateFrom || undefined}
           onChange={(e) => onChangeTo(e.target.value)}
-          className={inputClass}
+          className="tnum h-10"
           aria-invalid={Boolean(errorTo)}
         />
         <ErrorMessage message={errorTo} />

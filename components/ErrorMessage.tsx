@@ -1,3 +1,5 @@
+import { AlertCircle } from "lucide-react";
+
 interface ErrorMessageProps {
   message?: string;
 }
@@ -8,11 +10,9 @@ export default function ErrorMessage({ message }: ErrorMessageProps) {
   return (
     <p
       role="alert"
-      className="animate-fade mt-1.5 flex items-center gap-1.5 text-[13px] leading-tight text-accent"
+      className="animate-fade mt-1.5 flex items-center gap-1.5 text-[13px] leading-tight text-destructive"
     >
-      <span aria-hidden className="text-accent-deep">
-        ⸺
-      </span>
+      <AlertCircle aria-hidden className="size-3.5 shrink-0" />
       {message}
     </p>
   );

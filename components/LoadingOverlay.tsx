@@ -1,3 +1,5 @@
+import { Spinner } from "@/components/ui/spinner";
+
 interface LoadingOverlayProps {
   show: boolean;
   message?: string;
@@ -17,16 +19,11 @@ export default function LoadingOverlay({
     <div
       role="status"
       aria-live="assertive"
-      className="animate-fade fixed inset-0 z-[100] flex items-center justify-center bg-ink/55 backdrop-blur-[2px]"
+      className="animate-fade fixed inset-0 z-[100] flex items-center justify-center bg-foreground/40 backdrop-blur-[2px]"
     >
-      <div className="flex flex-col items-center gap-6 px-8 text-center">
-        {/* 朱の落款を巡る回転リング */}
-        <span className="relative flex h-16 w-16 items-center justify-center">
-          <span className="absolute inset-0 animate-spin rounded-full border-2 border-transparent border-t-accent border-r-accent/40 [animation-duration:0.9s]" />
-          <span className="absolute inset-2 rounded-full border border-paper/30" />
-          <span className="font-display text-[15px] font-bold text-paper">職</span>
-        </span>
-        <p className="font-display text-base tracking-wide text-paper">{message}</p>
+      <div className="flex flex-col items-center gap-5 rounded-xl bg-card px-10 py-8 shadow-lg">
+        <Spinner className="size-8 text-primary" />
+        <p className="text-sm font-medium text-foreground">{message}</p>
       </div>
     </div>
   );
