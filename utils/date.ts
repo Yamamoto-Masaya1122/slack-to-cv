@@ -6,6 +6,17 @@ export function dateToUnixRange(from: string, to: string): { oldest: string; lat
   return { oldest: String(oldest), latest: String(latest) };
 }
 
+/**
+ * "YYYY-MM-DD" を days 日ずらして "YYYY-MM-DD" を返す。
+ * search.messages の after:/before: は日単位かつ指定日を含まないため、境界調整に使う。
+ */
+export function shiftDate(date: string, days: number): string {
+  // 正午UTC基準でずらし、TZ境界での日付ずれを避ける
+  const d = new Date(`${date}T12:00:00Z`);
+  d.setUTCDate(d.getUTCDate() + days);
+  return d.toISOString().slice(0, 10);
+}
+
 /** Slackのts(エポック秒.マイクロ秒) を "YYYY-MM-DD HH:mm" (JST) に整形 */
 export function formatTs(ts: string): string {
   const epochMs = Math.floor(Number(ts) * 1000);
