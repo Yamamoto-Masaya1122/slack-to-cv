@@ -53,10 +53,10 @@ export default function Header() {
               <li>
                 書き出しボタンで <code>messages.json</code> と{" "}
                 <code>resume_draft.md</code> を <code>storage/</code>{" "}
-                配下に保存します。
+                配下の最新日時フォルダに保存します。
               </li>
               <li>
-                保存したファイルをClaude Codeに渡すと、職務経歴書の下書きが生成されます。
+                claude codeを開き、<code>/output-cv</code>のコマンドを実行すると<code>storage/</code>配下の最新日時フォルダに職務経歴書(resume.md)が生成されます。
               </li>
             </ol>
           </DialogContent>
