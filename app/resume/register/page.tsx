@@ -149,16 +149,6 @@ export default function RegisterPage() {
       <LoadingOverlay show={fetching} />
 
       <div className="mx-auto w-full max-w-2xl">
-        {/* マストヘッド */}
-        <header className="animate-rise mb-10">
-          <h1 className="text-2xl font-bold leading-tight tracking-tight text-foreground sm:text-3xl">
-            職務経歴書ジェネレーター
-          </h1>
-          <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-            Slackの会話から、プロジェクト詳細の下書きを仕立てる。
-          </p>
-        </header>
-
         {/* ステップインジケーター */}
         <ol className="animate-rise mb-7 flex items-center gap-3 [animation-delay:80ms]">
           <StepBadge index={1} label="設定" active={step === 1} done={step > 1} />
