@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { Inter, Noto_Sans_JP } from "next/font/google";
+import { Manrope, Noto_Sans_JP } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import Header from "@/components/Header";
 
-const inter = Inter({
+const manrope = Manrope({
   subsets: ["latin"],
-  variable: "--font-inter",
+  variable: "--font-manrope",
   display: "swap",
 });
 
@@ -33,7 +33,7 @@ export default function RootLayout({
   return (
     <html
       lang="ja"
-      className={cn("h-full", "font-sans", inter.variable, notoSansJp.variable)}
+      className={cn("h-full", "font-sans", manrope.variable, notoSansJp.variable)}
     >
       <body className="min-h-full">
         <TooltipProvider delayDuration={200}>

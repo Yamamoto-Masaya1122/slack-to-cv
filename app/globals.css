@@ -7,30 +7,32 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
-  Aesthetic direction: "Modern SaaS / Vercel-clean"
-  白〜薄グレー(slate)地に slate のテキスト、青(#2563eb)を一点アクセントに使う
-  クリーンでプロダクト的な職務経歴書ツール。
+  Aesthetic direction: "AI × Career / Purple × Navy SaaS"
+  薄紫(#F8F7FF)地に navy 寄りのテキスト、紫(#6D4AFF)を一点アクセントに使う。
+  Slack連携らしい親しみやすさと職務経歴書の信頼感を両立した、
+  丸み(角丸12px)と軽いグラデーションのモダンなプロダクトツール。
 */
 
 @theme inline {
-  --color-paper: #f8fafc;
+  --color-paper: #f8f7ff;
   --color-surface: #ffffff;
   --color-surface-raised: #ffffff;
-  --color-ink: #0f172a;
-  --color-ink-soft: #475569;
-  --color-ink-faint: #94a3b8;
-  --color-line: #e2e8f0;
-  --color-line-strong: #cbd5e1;
-  --color-accent: #2563eb;
-  --color-accent-deep: #1d4ed8;
-  --color-accent-soft: #eff6ff;
+  --color-ink: #16122b;
+  --color-ink-soft: #4a4570;
+  --color-ink-faint: #9590b0;
+  --color-line: #e8e5f2;
+  --color-line-strong: #d6d1e8;
+  --color-accent: #6d4aff;
+  --color-accent-deep: #5b3bea;
+  --color-accent-soft: #f5f2ff;
   --color-success: #16a34a;
+  --color-warning: #f59e0b;
 
-  --font-display: var(--font-inter), var(--font-noto), system-ui, sans-serif;
-  --font-sans: var(--font-inter), var(--font-noto), system-ui, sans-serif;
+  --font-display: var(--font-manrope), var(--font-noto), system-ui, sans-serif;
+  --font-sans: var(--font-manrope), var(--font-noto), system-ui, sans-serif;
 
-  --radius-sm: 4px;
-  --radius: 8px;
+  --radius-sm: 6px;
+  --radius: 12px;
   --font-heading: var(--font-sans);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
@@ -72,38 +74,38 @@
 
 :root {
   color-scheme: light;
-  --background: #f8fafc;
-  --foreground: #0f172a;
+  --background: #f8f7ff;
+  --foreground: #16122b;
   --card: #ffffff;
-  --card-foreground: #0f172a;
+  --card-foreground: #16122b;
   --popover: #ffffff;
-  --popover-foreground: #0f172a;
-  --primary: #2563eb;
+  --popover-foreground: #16122b;
+  --primary: #6d4aff;
   --primary-foreground: #ffffff;
-  --secondary: #f1f5f9;
-  --secondary-foreground: #0f172a;
-  --muted: #f1f5f9;
-  --muted-foreground: #64748b;
-  --accent: #f1f5f9;
-  --accent-foreground: #0f172a;
+  --secondary: #f1eefc;
+  --secondary-foreground: #16122b;
+  --muted: #f1eefc;
+  --muted-foreground: #6d6790;
+  --accent: #f5f2ff;
+  --accent-foreground: #16122b;
   --destructive: #dc2626;
-  --border: #e2e8f0;
-  --input: #e2e8f0;
-  --ring: #2563eb;
-  --chart-1: #2563eb;
-  --chart-2: #0d9488;
+  --border: #e8e5f2;
+  --input: #e8e5f2;
+  --ring: #6d4aff;
+  --chart-1: #6d4aff;
+  --chart-2: #9b6cff;
   --chart-3: #16a34a;
   --chart-4: #f59e0b;
-  --chart-5: #64748b;
-  --radius: 0.5rem;
+  --chart-5: #6d6790;
+  --radius: 0.75rem;
   --sidebar: #ffffff;
-  --sidebar-foreground: #0f172a;
-  --sidebar-primary: #2563eb;
+  --sidebar-foreground: #16122b;
+  --sidebar-primary: #6d4aff;
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #f1f5f9;
-  --sidebar-accent-foreground: #0f172a;
-  --sidebar-border: #e2e8f0;
-  --sidebar-ring: #2563eb;
+  --sidebar-accent: #f5f2ff;
+  --sidebar-accent-foreground: #16122b;
+  --sidebar-border: #e8e5f2;
+  --sidebar-ring: #6d4aff;
 }
 
 html {
@@ -113,6 +115,12 @@ html {
 
 body {
   background-color: var(--color-paper);
+  background-image: radial-gradient(
+    120% 80% at 50% -10%,
+    color-mix(in srgb, var(--color-accent) 8%, transparent) 0%,
+    transparent 60%
+  );
+  background-attachment: fixed;
   color: var(--color-ink);
   font-family: var(--font-sans);
 }
