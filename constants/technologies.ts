@@ -1,5 +1,5 @@
 export const TECHNOLOGIES = {
-  言語: ["PHP", "Python", "Ruby", "Go", "Java", "TypeScript", "JavaScript", "Swift", "Kotlin"],
+  言語: ["PHP", "Python", "Ruby", "Go", "Java", "TypeScript", "JavaScript", "Swift", "Kotlin", "HTML", "CSS"],
   フレームワーク: ["Laravel", "Rails", "Django", "FastAPI", "Spring", "Next.js", "React", "Vue.js", "NestJS"],
   DB: ["MySQL", "PostgreSQL", "MongoDB", "Redis", "DynamoDB"],
   インフラ: ["AWS", "GCP", "Azure", "Docker", "Kubernetes", "Terraform", "Nginx"],
